@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
@@ -34,3 +35,17 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+=======
+# IdeaLab
+
+
+backened
+--------
+The api directory contains the backend part of the application.
+
+frontend
+----------
+Create a new folder for your route, for example, "login".
+Within the route folder, create a page.tsx file. This page will be accessible via the route "http://localhost:3000/login".   ("meetingpage" on our project is an example)
+
+>>>>>>> c26b088d9ee8ac6421b1bf8ce3162ccf533971e9
