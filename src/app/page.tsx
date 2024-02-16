@@ -3,6 +3,7 @@ import Image from "next/image";
 export default function Home() {
   return (
   <div className="grid grid-row-3 w-screen">
+ {/**frame 1 */}
    <div className="flex flex-col h-screen bg-white">
    {/**NAVBAR */}
     <div className="flex flex-row w-screen h-24 bg-blue-100 items-center justify-start">
@@ -10,18 +11,22 @@ export default function Home() {
     </div>
     {/**NAVBAR */}
     <div className=" ">
-
     </div>
+
     <div>
-
     </div>
    </div>
+   {/**frame 1 */}
+
+   {/**frame 2 */}
    <div className="h-screen bg-white">
-    <h1>middle</h1>
+    <h1 className="text-black">middle</h1>
 
    </div>
+   {/**frame 2 */}
+
    <div className="h-screen bg-white">
-    <h1>Footer</h1>
+    <h1 className="text-black">Footer</h1>
    </div>
   </div>
   );
