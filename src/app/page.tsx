@@ -18,7 +18,6 @@ export default function Home() {
            <br></br>
            <p className="text-black text-lg font-regular">Conversations across languages often hit roadblocks, leading to misunderstandings and hindering effective communication. At TRANSCEND, we believe in making language no longer a barrier in conversations. Introducing our groundbreaking solution: a comprehensive real-time language translation software.</p>
         </div>
-      
       </div>
       <div className="flex w-1/2 h-2/3 items-center justify-center">
           <img src="destop-removebg-preview 1.svg"></img>
