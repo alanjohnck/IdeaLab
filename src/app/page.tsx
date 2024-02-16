@@ -4,10 +4,10 @@ export default function Home() {
   return (
   <div className="grid grid-row-3 w-screen bg-white">
  {/**frame 1 */}
-   <div className="flex flex-col h-screen gap-3 bg-white">
+   <div className="flex flex-col h-screen gap-3 bg-white ">
    {/**NAVBAR */}
-    <div className="flex flex-row w-screen h-24  items-center justify-between">
-          <img className="flex w-45 h-36 p-6" src="Component 2.svg"></img>
+    <div className="flex flex-row w-screen h-24  items-center justify-between z-20">
+          <img className="flex w-45 h-36 p-6 cursor-pointer" src="Component 2.svg"></img>
           <div className="mx-12">
           <button className="bg-[#2096BD] border-[2px]  rounded-xl py-2 px-5 font-semibold transition delay-75 hover:bg-white hover:border-[#2096BD]  hover:text-[#176B87]">
             Sign Up
