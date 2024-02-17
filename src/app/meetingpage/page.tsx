@@ -1,11 +1,12 @@
+"use client"
 
-export default function MeetingPage(){
-    return (
 
-        <div className="flex flex-col items-center justify-center h-screen">
-            <h1>
-                Meeting Page
-            </h1>
-        </div>
-    );
+
+const MeetingPage = () => {
+ return (
+ <div>
+     <h1>Meeting page</h1>
+ </div>
+ );
 }
+export default MeetingPage;
