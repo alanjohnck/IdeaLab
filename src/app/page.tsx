@@ -2,54 +2,63 @@ import Image from "next/image";
 import middle from "../../public/transcend-middle.png";
 export default function Home() {
   return (
-  <div className="grid grid-row-3 w-screen bg-white">
- {/**frame 1 */}
-   <div className="flex flex-col h-screen gap-3 bg-white ">
-   {/**NAVBAR */}
-    <div className="flex flex-row w-screen h-24  items-center justify-between z-20">
-          <img className="flex w-45 h-36 p-6 cursor-pointer" src="Component 2.svg"></img>
+    <div className="grid grid-row-3 w-screen bg-white">
+      {/**frame 1 */}
+      <div className="flex flex-col h-screen gap-3 bg-white ">
+        {/**NAVBAR */}
+        <div className="flex flex-row w-screen h-24  items-center justify-between z-20">
+          <img
+            className="flex w-45 h-36 p-6 cursor-pointer"
+            src="Component 2.svg"
+          ></img>
           <div className="mx-12">
-          <button className="bg-[#2096BD] border-[2px]  rounded-xl py-2 px-5 font-semibold transition delay-75 hover:bg-white hover:border-[#2096BD]  hover:text-[#176B87]">
-            Sign Up
-          </button>
-          <button className="border-[2px] border-[#2096BD] ml-5  rounded-xl py-2 px-4 font-semibold text-[#176B87] transition delay-75 hover:bg-[#2096BD] hover:text-white">
-            Download
-          </button>
+            <button className="bg-[#2096BD] border-[2px]  rounded-xl py-2 px-5 font-semibold transition delay-75 hover:bg-white hover:border-[#2096BD]  hover:text-[#176B87]">
+              Sign Up
+            </button>
+            <button className="border-[2px] border-[#2096BD] ml-5  rounded-xl py-2 px-4 font-semibold text-[#176B87] transition delay-75 hover:bg-[#2096BD] hover:text-white">
+              Download
+            </button>
           </div>
-    </div>
-    {/**NAVBAR */}
-   
+        </div>
+        {/**NAVBAR */}
 
-<div className="border border-[#98C3D1] w-[250px] h-[250px] rounded-md self-start  z-10 absolute top-40 left-20"></div>
-  <div className="flex flex-col h-screen w-screen place-content-start gap-2"> 
-    <div className="flex flex-row w-screen h-5/6 items-center justify-start gap-10 p-10 ">
-      <div className="flex flex-col w-1/2 h-1/2  items-center justify-center border border-blue-100 rounded-md gap-6">
-        <div className="flex flex-col items-start justify-start p-10 gap-4">
-           <h1 className="flex justify-start  text-blue-300  text-3xl font-bold">Breaking Language Barriers with Real-Time Translation</h1>
-           <br></br>
-           <p className="text-black text-lg font-light leading-10">Conversations across languages often hit roadblocks, leading to misunderstandings and hindering effective communication. At TRANSCEND, we believe in making language no longer a barrier in conversations. Introducing our groundbreaking solution: a comprehensive real-time language translation software.</p>
+        <div className="border border-[#98C3D1] w-[250px] h-[250px] rounded-md self-start  z-10 absolute top-40 left-20"></div>
+        <div className="flex flex-col h-screen w-screen place-content-start gap-2">
+          <div className="flex flex-row w-screen h-5/6 items-center justify-start gap-10 p-10 ">
+            <div className="flex flex-col w-1/2 h-1/2  items-center justify-center border border-blue-100 rounded-md gap-6">
+              <div className="flex flex-col items-start justify-start p-10 gap-4">
+                <h1 className="flex justify-start  text-blue-300  text-3xl font-bold">
+                  Breaking Language Barriers with Real-Time Translation
+                </h1>
+                <br></br>
+                <p className="text-black text-lg font-light leading-10">
+                  Conversations across languages often hit roadblocks, leading
+                  to misunderstandings and hindering effective communication. At
+                  TRANSCEND, we believe in making language no longer a barrier
+                  in conversations. Introducing our groundbreaking solution: a
+                  comprehensive real-time language translation software.
+                </p>
+              </div>
+            </div>
+            <div className="flex w-1/2 h-2/3 items-center justify-center">
+              <img src="destop-removebg-preview 1.svg"></img>
+            </div>
+          </div>
+
+          <div className="flex flex-grow h-1/6 justify-center items-center pb-5 ">
+            border-[#2096BD]
+            <button className=" box-content p-4 border-4 bg-[#2096BD]    rounded-xl py-4 px-9 font-semibold  ">
+              New Meeting
+              <img
+                src="Video call.svg"
+                alt="Icon"
+                className="w-7 h-7 ml-2 float-right"
+              />
+            </button>
+          </div>
         </div>
       </div>
-      <div className="flex w-1/2 h-2/3 items-center justify-center">
-          <img src="destop-removebg-preview 1.svg"></img>
-      </div>
-    </div>
-
-  <div className="flex flex-grow h-1/6 justify-center items-center pb-5 ">border-[#2096BD]  
-     <button className=" box-content p-4 border-4 bg-[#2096BD]    rounded-xl py-4 px-9 font-semibold  ">
-       New Meeting
-          <img src="Video call.svg" alt="Icon" className="w-7 h-7 ml-2 float-right" />
-     </button>       
-  </div>
-</div>
-
-    
-   </div>
-  {/**frame 1 */}
-
-
-
-
+      {/**frame 1 */}
 
       {/**frame 2 */}
       <div className="flex flex-col mt-20">
