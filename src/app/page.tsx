@@ -7,9 +7,9 @@ export default function Home() {
   return (
     <div className="grid grid-row-3 w-screen bg-white ">
       {/**frame 1 */}
-      <div className="flex flex-col h-screen gap-3 bg-white ">
+      <div className="flex flex-col h-screen gap-3 bg-white">
         {/**NAVBAR */}
-        <div className="flex flex-row w-screen h-24 fixed bg-white items-center justify-between z-20">
+        <div className="flex flex-row w-screen h-24 fixed bg-white items-center justify-between z-20 ">
           <img
             className="flex w-45 h-36 p-6 cursor-pointer"
             src="Component 2.svg"
@@ -25,15 +25,15 @@ export default function Home() {
         </div>
         {/**NAVBAR */}
 
-        <div className="border border-[#98C3D1] w-[250px] h-[250px] rounded-md self-start  z-10 absolute top-38  left-32 "></div>
+        <div className="border border-[#98C3D1] w-[250px] h-[250px] rounded-md self-start  z-10 absolute mt-4  left-32 "></div>
         <div className="flex flex-col h-screen w-screen place-content-start gap-2 ">
           <div className="flex flex-row w-screen h-5/6 items-center justify-start gap-10 p-10 ">
-            <div className="flex flex-col w-[670px] h-[340px] items-center justify-center border border-[#98C3D1] rounded-md mt-14 ml-4 gap-6">
+            <div className="flex flex-col w-[670px] h-[350px] items-center justify-center border border-[#98C3D1] rounded-md mt-14 ml-4 gap-6">
               <div className="flex flex-col items-start justify-start p-10 gap-4">
                 <h1 className="flex justify-start  text-blue-300  text-3xl font-bold">
                   Breaking Language Barriers with Real-Time Translation
                 </h1>
-                <br></br>
+
                 <p className="text-black tracking-normal leading-10">
                   Conversations across languages often hit roadblocks, leading
                   to misunderstandings and hindering effective communication. At
