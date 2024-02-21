@@ -1,9 +1,8 @@
 "use client";
 import Image from "next/image";
 import middle from "../../public/transcend-middle.png";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 export default function Home() {
-  const router = useRouter();
   return (
     <div className="grid grid-row-3 w-screen bg-white ">
       {/**frame 1 */}
@@ -48,17 +47,16 @@ export default function Home() {
             </div>
           </div>
           <div className="flex flex-grow h-1/6 justify-center items-center pb-5 ">
-            <button
-              onClick={() => router.push("/meetingpage")}
-              className=" box-content p-4 border-4 bg-[#2096BD]    rounded-xl py-4 px-9 font-semibold  "
-            >
-              New Meeting
-              <img
-                src="Video call.svg"
-                alt="Icon"
-                className="w-7 h-7 ml-2 float-right"
-              />
-            </button>
+            <Link href="/meetingpage">
+              <button className=" box-content p-4 border-4 bg-[#2096BD]    rounded-xl py-4 px-9 font-semibold  ">
+                New Meeting
+                <img
+                  src="Video call.svg"
+                  alt="Icon"
+                  className="w-7 h-7 ml-2 float-right"
+                />
+              </button>
+            </Link>
           </div>
         </div>
       </div>
