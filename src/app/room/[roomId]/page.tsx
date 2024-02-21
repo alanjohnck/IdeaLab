@@ -28,7 +28,10 @@ export default function RoomId({ params }: any) {
     const zc = ZegoUIKitPrebuilt.create(kitToken);
     zc.joinRoom({
       container: element,
-
+      showPreJoinView: true, // Ensure that the prejoin view is enabled
+    preJoinViewConfig: {
+    title: "Your Text Here" // Set the title to your desired text
+  },
       sharedLinks: [{
         name: 'Copy Link',
         url: `https://localhost:3000/room/${roomID}`
@@ -39,13 +42,12 @@ export default function RoomId({ params }: any) {
       onJoinRoom() {
         // Start recording when joined room
         startRecording();
+        
       },
-      onInRoomTextMessageReceived(messages) {
-
-      },
-
+     
       showScreenSharingButton: false
     })
+    
   }
 
   const startRecording = () => {
@@ -74,19 +76,17 @@ export default function RoomId({ params }: any) {
     }
   };
 
-  useEffect(() => {
-   
-
+ useEffect(() => {
     return () => {
       // Stop the speech recognition if it's active
-      stopRecording();
+      startRecording();
     };
   }, []);
 
   return (
-    <div>
-      <div ref={myMeeting} />
-      <h1>{transcript}</h1>
+    <div className=''>
+      <div className='flex flex-col h-1/2 ' ref={myMeeting} />
+       <p className=' flex  z-10 top-5 left-4 items-center justify-center absolute p-5'>{transcript}</p>
     </div>
   );
 }
