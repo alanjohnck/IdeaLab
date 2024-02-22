@@ -1,7 +1,7 @@
-"use client"
-import React, { useState, useRef, useEffect } from 'react';
-import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
-
+"use client";
+import React, { useState, useRef, useEffect, use } from "react";
+import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
+import $ from "jquery";
 declare global {
   interface Window {
     webkitSpeechRecognition: any;
@@ -10,7 +10,27 @@ declare global {
 
 export default function RoomId({ params }: any) {
   const [transcript, setTranscript] = useState("");
+  const [translateText, setTranslateText] = useState("");
+  useEffect(() => {
+    translate();
+  }, [transcript]);
+  useEffect(() => {
+    console.log(translateText);
+  }, [translateText]);
+  const [selectedLanguage, setSelectedLanguage] = useState("ml");
+  const translate = () => {
+    const sourceLang = "en";
+    const targetLang = selectedLanguage;
+    if (transcript) {
+      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURI(
+        transcript
+      )}`;
 
+      $.getJSON(url, function (data) {
+        setTranslateText(data[0][0][0]);
+      });
+    }
+  };
   // Reference to store the SpeechRecognition instance
   const recognitionRef = useRef<any>(null);
 
@@ -29,26 +49,26 @@ export default function RoomId({ params }: any) {
     zc.joinRoom({
       container: element,
       showPreJoinView: true, // Ensure that the prejoin view is enabled
-    preJoinViewConfig: {
-    title: "Your Text Here" // Set the title to your desired text
-  },
-      sharedLinks: [{
-        name: 'Copy Link',
-        url: `https://localhost:3000/room/${roomID}`
-      }],
+      preJoinViewConfig: {
+        title: "Your Text Here", // Set the title to your desired text
+      },
+      sharedLinks: [
+        {
+          name: "Copy Link",
+          url: `https://localhost:3000/room/${roomID}`,
+        },
+      ],
       scenario: {
         mode: ZegoUIKitPrebuilt.OneONoneCall,
       },
       onJoinRoom() {
         // Start recording when joined room
         startRecording();
-        
       },
-     
-      showScreenSharingButton: false
-    })
-    
-  }
+
+      showScreenSharingButton: false,
+    });
+  };
 
   const startRecording = () => {
     // Create a new SpeechRecognition instance and configure it
@@ -76,7 +96,7 @@ export default function RoomId({ params }: any) {
     }
   };
 
- useEffect(() => {
+  useEffect(() => {
     return () => {
       // Stop the speech recognition if it's active
       startRecording();
@@ -84,9 +104,42 @@ export default function RoomId({ params }: any) {
   }, []);
 
   return (
-    <div className=''>
-      <div className='flex flex-col h-1/2 ' ref={myMeeting} />
-       <p className=' flex  z-10 top-5 left-4 items-center justify-center absolute p-5'>{transcript}</p>
+    <div className="flex items-center flex-col">
+      {/* Add more options as needed */}
+
+      <div className="flex flex-col h-1/2 " ref={myMeeting}></div>
+      <label className="block text-sm font-medium text-gray-700 mt-12">
+        Select your language
+      </label>
+      <select
+        value={selectedLanguage}
+        onChange={(e) => setSelectedLanguage(e.target.value)}
+        className="mx-72 text-black block w-1/4 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+      >
+        <option value="ml">Malayalam</option>
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <option value="de">German</option>
+        <option value="it">Italian</option>
+        <option value="ja">Japanese</option>
+        <option value="ru">Russian</option>
+        <option value="zh-CN">Chinese (Simplified)</option>
+        <option value="zh-TW">Chinese (Traditional)</option>
+        <option value="hi">Hindi</option>
+        <option value="bn">Bengali</option>
+        <option value="te">Telugu</option>
+        <option value="mr">Marathi</option>
+        <option value="ta">Tamil</option>
+        <option value="gu">Gujarati</option>
+        <option value="kn">Kannada</option>
+        <option value="ml">Malayalam</option>
+        <option value="pa">Punjabi</option>
+        <option value="or">Odia</option>
+      </select>
+      <p className=" flex  z-10 top-5 left-4 items-center justify-center absolute p-5">
+        {translateText}
+      </p>
     </div>
   );
 }
