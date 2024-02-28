@@ -36,7 +36,7 @@ useEffect(() => {
   socket.on('translatedText', (data) => {
     // Handle received translated text
     setReceivedTranslateText(data);
-    console.log(data);
+    console.log( `recieved data: ${data}`);
   });
 
   // Clean up the event listener when the component is unmounted
