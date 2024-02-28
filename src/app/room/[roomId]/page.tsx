@@ -2,15 +2,49 @@
 import React, { useState, useRef, useEffect, use } from "react";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 import $ from "jquery";
+import io from 'socket.io-client';
 declare global {
   interface Window {
     webkitSpeechRecognition: any;
   }
 }
 
+
+const socket = io('http://localhost:3001'); // Connect to your signaling server
+
+
+
 export default function RoomId({ params }: any) {
   const [transcript, setTranscript] = useState("");
   const [translateText, setTranslateText] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
+  const [receivedTranslateText, setReceivedTranslateText] = useState("");
+  // Send translated text to the signaling server
+  // ...
+
+useEffect(() => {
+  // Emit the 'translatedText' event whenever the translated text changes
+  if (translateText) {
+    socket.emit('translatedText', translateText);
+    console.log("emmited")
+  }
+}, [translateText]);
+
+
+useEffect(() => {
+  // Handle the 'translatedText' event
+  socket.on('translatedText', (data) => {
+    // Handle received translated text
+    setReceivedTranslateText(data);
+    console.log(data);
+  });
+
+  // Clean up the event listener when the component is unmounted
+  return () => {
+    socket.off('translatedText');
+  };
+}, []);
+
   useEffect(() => {
     translate();
   }, [transcript]);
@@ -72,6 +106,7 @@ export default function RoomId({ params }: any) {
 
   const startRecording = () => {
     // Create a new SpeechRecognition instance and configure it
+    setIsRecording(true);
     recognitionRef.current = new window.webkitSpeechRecognition();
     recognitionRef.current.continuous = true;
     recognitionRef.current.interimResults = true;
@@ -91,6 +126,7 @@ export default function RoomId({ params }: any) {
 
   const stopRecording = () => {
     if (recognitionRef.current) {
+      setIsRecording(false);
       // Stop the speech recognition and mark recording as complete
       recognitionRef.current.stop();
     }
@@ -137,9 +173,11 @@ export default function RoomId({ params }: any) {
         <option value="pa">Punjabi</option>
         <option value="or">Odia</option>
       </select>
-      <p className=" flex  z-10 top-5 left-4 items-center justify-center absolute p-5">
-        {translateText}
-      </p>
+      {isRecording && (
+        <p className=" flex  z-10 top-5 left-4 items-center justify-center absolute p-5">
+          {receivedTranslateText}
+        </p>
+      )}
     </div>
   );
 }
