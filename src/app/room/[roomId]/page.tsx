@@ -2,17 +2,14 @@
 import React, { useState, useRef, useEffect, use } from "react";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 import $ from "jquery";
-import io from 'socket.io-client';
+import io from "socket.io-client";
 declare global {
   interface Window {
     webkitSpeechRecognition: any;
   }
 }
 
-
-const socket = io('http://localhost:3001'); // Connect to your signaling server
-
-
+const socket = io("http://localhost:3001"); // Connect to your signaling server
 
 export default function RoomId({ params }: any) {
   const [transcript, setTranscript] = useState("");
@@ -22,28 +19,27 @@ export default function RoomId({ params }: any) {
   // Send translated text to the signaling server
   // ...
 
-useEffect(() => {
-  // Emit the 'translatedText' event whenever the translated text changes
-  if (translateText) {
-    socket.emit('translatedText', translateText);
-    console.log("emmited")
-  }
-}, [translateText]);
+  useEffect(() => {
+    // Emit the 'translatedText' event whenever the translated text changes
+    if (translateText) {
+      socket.emit("translatedText", translateText);
+      console.log("emmited");
+    }
+  }, [translateText]);
 
+  useEffect(() => {
+    // Handle the 'translatedText' event
+    socket.on("translatedText", (data) => {
+      // Handle received translated text
+      setReceivedTranslateText(data);
+      console.log( `recieved : ${data} `);
+    });
 
-useEffect(() => {
-  // Handle the 'translatedText' event
-  socket.on('translatedText', (data) => {
-    // Handle received translated text
-    setReceivedTranslateText(data);
-    console.log( `recieved data: ${data}`);
-  });
-
-  // Clean up the event listener when the component is unmounted
-  return () => {
-    socket.off('translatedText');
-  };
-}, []);
+    // Clean up the event listener when the component is unmounted
+    return () => {
+      socket.off("translatedText");
+    };
+  }, []);
 
   useEffect(() => {
     translate();
@@ -53,7 +49,7 @@ useEffect(() => {
   }, [translateText]);
   const [selectedLanguage, setSelectedLanguage] = useState("ml");
   const translate = () => {
-    const sourceLang = "en";
+    const sourceLang = "ml";
     const targetLang = selectedLanguage;
     if (transcript) {
       const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURI(
@@ -89,7 +85,7 @@ useEffect(() => {
       sharedLinks: [
         {
           name: "Copy Link",
-          url: `https://localhost:3000/room/${roomID}`,
+          url: "https://localhost:3000/room/${roomID}",
         },
       ],
       scenario: {
@@ -110,7 +106,7 @@ useEffect(() => {
     recognitionRef.current = new window.webkitSpeechRecognition();
     recognitionRef.current.continuous = true;
     recognitionRef.current.interimResults = true;
-
+    recognitionRef.current.lang = "ml-IN";
     // Event handler for speech recognition results
     recognitionRef.current.onresult = (event: any) => {
       const { transcript } = event.results[event.results.length - 1][0];
