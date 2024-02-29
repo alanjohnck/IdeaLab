@@ -139,7 +139,11 @@ export default function RoomId({ params }: any) {
     <div className="flex items-center flex-col">
       {/* Add more options as needed */}
 
-      <div className="flex flex-col h-1/2 " ref={myMeeting}></div>
+      <div className="flex flex-col h-1/2 " ref={myMeeting}>
+      <p className=" flex  z-10 top-5 left-4 items-center justify-center absolute p-5">
+          {receivedTranslateText}
+        </p>
+      </div>
       <label className="block text-sm font-medium text-gray-700 mt-12">
         Select your language
       </label>
@@ -169,11 +173,6 @@ export default function RoomId({ params }: any) {
         <option value="pa">Punjabi</option>
         <option value="or">Odia</option>
       </select>
-      {isRecording && (
-        <p className=" flex  z-10 top-5 left-4 items-center justify-center absolute p-5">
-          {receivedTranslateText}
-        </p>
-      )}
     </div>
   );
 }
