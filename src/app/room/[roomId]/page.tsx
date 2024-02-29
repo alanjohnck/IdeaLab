@@ -12,6 +12,13 @@ declare global {
 const socket = io("http://localhost:3001"); // Connect to your signaling server
 
 export default function RoomId({ params }: any) {
+  function speak(text:any) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(utterance);
+  }
+  
+  // Use it like this:
+ 
   const [transcript, setTranscript] = useState("");
   const [translateText, setTranslateText] = useState("");
   const [isRecording, setIsRecording] = useState(false);
@@ -105,7 +112,7 @@ export default function RoomId({ params }: any) {
     setIsRecording(true);
     recognitionRef.current = new window.webkitSpeechRecognition();
     recognitionRef.current.continuous = true;
-    recognitionRef.current.interimResults = true;
+    recognitionRef.current.interimResults = false;
     recognitionRef.current.lang = "ml-IN";
     // Event handler for speech recognition results
     recognitionRef.current.onresult = (event: any) => {
@@ -136,21 +143,20 @@ export default function RoomId({ params }: any) {
   }, []);
 
   return (
-    <div className="flex items-center flex-col">
+    <div className="relative flex items-center flex-col h-screen">
       {/* Add more options as needed */}
-
-      <div className="flex flex-col h-1/2 " ref={myMeeting}>
-      <p className=" flex  z-10 top-5 left-4 items-center justify-center absolute p-5">
+      <div className="absolute z-10 top-5 left-4">
+      <p className=" p-5">
           {receivedTranslateText}
         </p>
-      </div>
+        {!translateText && `${speak(receivedTranslateText)}`}
       <label className="block text-sm font-medium text-gray-700 mt-12">
         Select your language
       </label>
       <select
         value={selectedLanguage}
         onChange={(e) => setSelectedLanguage(e.target.value)}
-        className="mx-72 text-black block w-1/4 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        className="text-black py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
       >
         <option value="ml">Malayalam</option>
         <option value="en">English</option>
@@ -173,6 +179,9 @@ export default function RoomId({ params }: any) {
         <option value="pa">Punjabi</option>
         <option value="or">Odia</option>
       </select>
+      </div>
+      <div className="flex flex-col h-full w-full " ref={myMeeting}>
+      </div>
     </div>
   );
 }
