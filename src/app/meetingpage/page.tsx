@@ -18,17 +18,18 @@ const handleJoinRoom =useCallback(()=>{
 },[router,value])
 
  return (
- <div className="flex flex-col h-screen w-screen items-center justify-center gap-5">
-     
-     <h1>Join room</h1>
+ <div className="bg-white flex flex-col h-screen w-screen items-center justify-center gap-5">
+     <div className="flex">
+           jgtr
+     </div>
+     <h1 className="text-black font-regular p-5 rounded-lg bg-slate-100">Create your own Room Id [eg:1234] and share it with your friend and join the room</h1>
      <input 
-     className="text-black "
+     className="text-black p-4 border border-blue-200 rounded-lg"
      type="text"
       value={value} 
       onChange={(e)=>setValue(e.target.value)} placeholder="enter the room code">
-
      </input>
-     <button className="bg-[#2096BD] w-[100px] h-[40px] rounded-lg " onClick={handleJoinRoom}>join</button>
+     <button className="bg-[#2096BD] w-[250px] h-[40px] rounded-lg " onClick={handleJoinRoom}>join</button>
  </div>
  );
 }
