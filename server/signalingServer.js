@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
   let timeout = null;
 
   // Handle events here
-  socket.on("translatedText", (data) => {
+  socket.on("transcriptText", (data) => {
     buffer += ' ' + data;
 
     // Clear the previous timeout
@@ -40,7 +40,7 @@ io.on("connection", (socket) => {
     // Set a new timeout
     timeout = setTimeout(() => {
       // Broadcast the buffered text to all other connected users
-      socket.broadcast.emit("translatedText", buffer);
+      socket.broadcast.emit("transcriptText", buffer);
 
       // Clear the buffer
       buffer = '';

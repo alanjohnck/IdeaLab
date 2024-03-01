@@ -12,55 +12,59 @@ declare global {
 const socket = io("http://localhost:3001"); // Connect to your signaling server
 
 export default function RoomId({ params }: any) {
-  function speak(text:any) {
+  function speak(text: any) {
     const utterance = new SpeechSynthesisUtterance(text);
     window.speechSynthesis.speak(utterance);
   }
-  
+
   // Use it like this:
- 
+
   const [transcript, setTranscript] = useState("");
   const [translateText, setTranslateText] = useState("");
-  const [isRecording, setIsRecording] = useState(false);
-  const [receivedTranslateText, setReceivedTranslateText] = useState("");
+  const [receivedTranscriptText, setReceivedTranscriptText] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState("ml");
   // Send translated text to the signaling server
   // ...
 
   useEffect(() => {
     // Emit the 'translatedText' event whenever the translated text changes
-    if (translateText) {
-      socket.emit("translatedText", translateText);
+    if (transcript) {
+      socket.emit("transcriptText", transcript);
       console.log("emmited");
     }
-  }, [translateText]);
+  }, [transcript]);
 
   useEffect(() => {
-    // Handle the 'translatedText' event
-    socket.on("translatedText", (data) => {
-      // Handle received translated text
-      setReceivedTranslateText(data);
-      console.log( `recieved : ${data} `);
+    socket.on("transcriptText", (data) => {
+      setReceivedTranscriptText(data);
+      console.log(`recieved : ${data} `);
     });
 
     // Clean up the event listener when the component is unmounted
     return () => {
-      socket.off("translatedText");
+      socket.off("transcriptText");
     };
   }, []);
 
   useEffect(() => {
     translate();
-  }, [transcript]);
+  }, [receivedTranscriptText]);
   useEffect(() => {
     console.log(translateText);
   }, [translateText]);
-  const [selectedLanguage, setSelectedLanguage] = useState("ml");
+
+  useEffect(() => {
+    if (!transcript && translateText) {
+      speak(translateText);
+    }
+  }, [transcript, translateText]);
+
   const translate = () => {
     const sourceLang = "ml";
     const targetLang = selectedLanguage;
-    if (transcript) {
+    if (receivedTranscriptText) {
       const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURI(
-        transcript
+        receivedTranscriptText
       )}`;
 
       $.getJSON(url, function (data) {
@@ -87,7 +91,7 @@ export default function RoomId({ params }: any) {
       container: element,
       showPreJoinView: true, // Ensure that the prejoin view is enabled
       preJoinViewConfig: {
-        title: "Your Text Here", // Set the title to your desired text
+        title: "Name", // Set the title to your desired text
       },
       sharedLinks: [
         {
@@ -109,7 +113,6 @@ export default function RoomId({ params }: any) {
 
   const startRecording = () => {
     // Create a new SpeechRecognition instance and configure it
-    setIsRecording(true);
     recognitionRef.current = new window.webkitSpeechRecognition();
     recognitionRef.current.continuous = true;
     recognitionRef.current.interimResults = false;
@@ -129,59 +132,47 @@ export default function RoomId({ params }: any) {
 
   const stopRecording = () => {
     if (recognitionRef.current) {
-      setIsRecording(false);
       // Stop the speech recognition and mark recording as complete
       recognitionRef.current.stop();
     }
   };
 
-  useEffect(() => {
-    return () => {
-      // Stop the speech recognition if it's active
-      startRecording();
-    };
-  }, []);
-
   return (
-    <div className="relative flex items-center flex-col h-screen">
+    <div className="relative flex items-center flex-col h-screen bg-white">
       {/* Add more options as needed */}
       <div className="absolute z-10 top-5 left-4">
-      <p className=" p-5">
-          {receivedTranslateText}
-        </p>
-        {!translateText && `${speak(receivedTranslateText)}`}
-      <label className="block text-sm font-medium text-gray-700 mt-12">
-        Select your language
-      </label>
-      <select
-        value={selectedLanguage}
-        onChange={(e) => setSelectedLanguage(e.target.value)}
-        className="text-black py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-      >
-        <option value="ml">Malayalam</option>
-        <option value="en">English</option>
-        <option value="es">Spanish</option>
-        <option value="fr">French</option>
-        <option value="de">German</option>
-        <option value="it">Italian</option>
-        <option value="ja">Japanese</option>
-        <option value="ru">Russian</option>
-        <option value="zh-CN">Chinese (Simplified)</option>
-        <option value="zh-TW">Chinese (Traditional)</option>
-        <option value="hi">Hindi</option>
-        <option value="bn">Bengali</option>
-        <option value="te">Telugu</option>
-        <option value="mr">Marathi</option>
-        <option value="ta">Tamil</option>
-        <option value="gu">Gujarati</option>
-        <option value="kn">Kannada</option>
-        <option value="ml">Malayalam</option>
-        <option value="pa">Punjabi</option>
-        <option value="or">Odia</option>
-      </select>
+        <p className=" p-5">{translateText}</p>
+        <label className="block text-sm font-medium text-gray-700 mt-12">
+          Select your language
+        </label>
+        <select
+          value={selectedLanguage}
+          onChange={(e) => setSelectedLanguage(e.target.value)}
+          className="text-black py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        >
+          <option value="ml">Malayalam</option>
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="fr">French</option>
+          <option value="de">German</option>
+          <option value="it">Italian</option>
+          <option value="ja">Japanese</option>
+          <option value="ru">Russian</option>
+          <option value="zh-CN">Chinese (Simplified)</option>
+          <option value="zh-TW">Chinese (Traditional)</option>
+          <option value="hi">Hindi</option>
+          <option value="bn">Bengali</option>
+          <option value="te">Telugu</option>
+          <option value="mr">Marathi</option>
+          <option value="ta">Tamil</option>
+          <option value="gu">Gujarati</option>
+          <option value="kn">Kannada</option>
+          <option value="ml">Malayalam</option>
+          <option value="pa">Punjabi</option>
+          <option value="or">Odia</option>
+        </select>
       </div>
-      <div className="flex flex-col h-full w-full " ref={myMeeting}>
-      </div>
+      <div className="flex flex-col h-full w-full " ref={myMeeting}></div>
     </div>
   );
 }
