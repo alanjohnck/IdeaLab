@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect, use } from "react";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
+import AudioStream from "../AudioStream";
 import axios from "axios";
 import $ from "jquery";
 import io from "socket.io-client";
@@ -26,7 +27,7 @@ export default function RoomId({ params }: any) {
   const [receivedTranscriptText, setReceivedTranscriptText] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("ml");
   const [sourceLang, setSourceLang] = useState("");
-  const [isRoomJoined, setIsRoomJoined] = useState(false)
+  const [isRoomJoined, setIsRoomJoined] = useState(false);
   // Send translated text to the signaling server
   // ...
 
@@ -51,13 +52,13 @@ export default function RoomId({ params }: any) {
   }, []);
 
   useEffect(() => {
-    socket.on('languageSelected', (language) => {
+    socket.on("languageSelected", (language) => {
       setSourceLang(language);
     });
-  
+
     // Clean up the event listener when the component is unmounted
     return () => {
-      socket.off('languageSelected');
+      socket.off("languageSelected");
     };
   }, []);
 
@@ -119,11 +120,16 @@ export default function RoomId({ params }: any) {
       onJoinRoom() {
         // Start recording when joined room
         startRecording();
-        setIsRoomJoined(true)
+        setIsRoomJoined(true);
       },
 
       showScreenSharingButton: false,
     });
+  };
+
+  const voiceSettings = {
+    stability: 0.95,
+    similarity_boost: 1,
   };
 
   useEffect(() => {
@@ -134,12 +140,11 @@ export default function RoomId({ params }: any) {
     recognitionRef.current.lang = selectedLanguage;
   }, [selectedLanguage]); // Watch for changes in selectedLanguage
 
-  useEffect(() => {
-    if (translateText) {
-      speak(translateText);
-    }
-  }, [translateText, selectedLanguage]);
-
+  // useEffect(() => {
+  //   if (translateText) {
+  //    // texttospeech();
+  //   }
+  // }, [translateText, selectedLanguage]);
 
   const startRecording = () => {
     // // Create a new SpeechRecognition instance and configure it
@@ -165,36 +170,9 @@ export default function RoomId({ params }: any) {
     // Start the speech recognition
     recognitionRef.current.start();
   };
-  // const texttospeech = async () => {
-  //   const data = {
-  //     model_id: "eleven_multilingual_v2",
-  //     text: translateText,
-  //     voice_settings: {
-  //       stability: 1,
-  //       similarity_boost: 1,
-  //       style: 2,
-  //     },
-  //   };
 
-  //   axios
-  //     .post(
-  //       "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM",
-  //       data,
-  //       {
-  //         headers: {
-  //           "xi-api-key": "7cabe86334a078e51c316eb42f430486",
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     )
-  //     .then((response) => {
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
-
+  const apiKey = "7cabe86334a078e51c316eb42f430486";
+  const voiceId = "21m00Tcm4TlvDq8ikWAM"
   const stopRecording = () => {
     if (recognitionRef.current) {
       // Stop the speech recognition and mark recording as complete
@@ -207,41 +185,46 @@ export default function RoomId({ params }: any) {
       {/* Add more options as needed */}
       <div className="absolute z-10 top-5 left-4">
         <p className=" p-5">{translateText}</p>
-          <>
-        <label className="block text-sm font-medium text-gray-700 mt-12">
-          Select your language
-        </label>
-        <select
-          value={selectedLanguage}
-          onChange={(e) => {
-            setSelectedLanguage(e.target.value)
-            socket.emit('languageSelected', e.target.value);
-          }}
-          className="text-black py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-        >
-          <option value="ml">Malayalam</option>
-          <option value="en">English</option>
-          <option value="es">Spanish</option>
-          <option value="fr">French</option>
-          <option value="de">German</option>
-          <option value="it">Italian</option>
-          <option value="ja">Japanese</option>
-          <option value="ru">Russian</option>
-          <option value="zh-CN">Chinese (Simplified)</option>
-          <option value="zh-TW">Chinese (Traditional)</option>
-          <option value="hi">Hindi</option>
-          <option value="bn">Bengali</option>
-          <option value="te">Telugu</option>
-          <option value="mr">Marathi</option>
-          <option value="ta">Tamil</option>
-          <option value="gu">Gujarati</option>
-          <option value="kn">Kannada</option>
-          <option value="ml">Malayalam</option>
-          <option value="pa">Punjabi</option>
-          <option value="or">Odia</option>
-        </select>
+        <>
+          <label className="block text-sm font-medium text-gray-700 mt-12">
+            Select your language
+          </label>
+          <select
+            value={selectedLanguage}
+            onChange={(e) => {
+              setSelectedLanguage(e.target.value);
+              socket.emit("languageSelected", e.target.value);
+            }}
+            className="text-black py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          >
+            <option value="ml">Malayalam</option>
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="it">Italian</option>
+            <option value="ja">Japanese</option>
+            <option value="ru">Russian</option>
+            <option value="zh-CN">Chinese (Simplified)</option>
+            <option value="zh-TW">Chinese (Traditional)</option>
+            <option value="hi">Hindi</option>
+            <option value="bn">Bengali</option>
+            <option value="te">Telugu</option>
+            <option value="mr">Marathi</option>
+            <option value="ta">Tamil</option>
+            <option value="gu">Gujarati</option>
+            <option value="kn">Kannada</option>
+            <option value="ml">Malayalam</option>
+            <option value="pa">Punjabi</option>
+            <option value="or">Odia</option>
+          </select>
         </>
-        
+        <AudioStream
+          voiceId={voiceId}
+          text={translateText}
+          apiKey={apiKey}
+          voiceSettings={voiceSettings}
+        />
       </div>
       <div className="flex flex-col h-full w-full " ref={myMeeting}></div>
     </div>
