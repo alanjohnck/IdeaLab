@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect, use } from "react";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
+import axios from "axios";
 import $ from "jquery";
 import io from "socket.io-client";
 declare global {
@@ -14,6 +15,7 @@ const socket = io("http://localhost:3001"); // Connect to your signaling server
 export default function RoomId({ params }: any) {
   function speak(text: any) {
     const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "de-DE";
     window.speechSynthesis.speak(utterance);
   }
 
@@ -23,6 +25,8 @@ export default function RoomId({ params }: any) {
   const [translateText, setTranslateText] = useState("");
   const [receivedTranscriptText, setReceivedTranscriptText] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("ml");
+  const [sourceLang, setSourceLang] = useState("");
+  const [isRoomJoined, setIsRoomJoined] = useState(false)
   // Send translated text to the signaling server
   // ...
 
@@ -47,20 +51,30 @@ export default function RoomId({ params }: any) {
   }, []);
 
   useEffect(() => {
+    socket.on('languageSelected', (language) => {
+      setSourceLang(language);
+    });
+  
+    // Clean up the event listener when the component is unmounted
+    return () => {
+      socket.off('languageSelected');
+    };
+  }, []);
+
+  useEffect(() => {
     translate();
-  }, [receivedTranscriptText]);
+  }, [receivedTranscriptText, selectedLanguage]);
   useEffect(() => {
     console.log(translateText);
   }, [translateText]);
 
-  useEffect(() => {
-    if (!transcript && translateText) {
-      speak(translateText);
-    }
-  }, [transcript, translateText]);
+  // useEffect(() => {
+  //   if (!transcript && translateText) {
+  //     texttospeech();
+  //   }
+  // }, [transcript, translateText]);
 
   const translate = () => {
-    const sourceLang = "ml";
     const targetLang = selectedLanguage;
     if (receivedTranscriptText) {
       const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURI(
@@ -105,30 +119,81 @@ export default function RoomId({ params }: any) {
       onJoinRoom() {
         // Start recording when joined room
         startRecording();
+        setIsRoomJoined(true)
       },
 
       showScreenSharingButton: false,
     });
   };
 
-  const startRecording = () => {
-    // Create a new SpeechRecognition instance and configure it
+  useEffect(() => {
+    // Create a new SpeechRecognition instance and configure it whenever selectedLanguage changes
     recognitionRef.current = new window.webkitSpeechRecognition();
     recognitionRef.current.continuous = true;
     recognitionRef.current.interimResults = false;
-    recognitionRef.current.lang = "ml-IN";
+    recognitionRef.current.lang = selectedLanguage;
+  }, [selectedLanguage]); // Watch for changes in selectedLanguage
+
+  useEffect(() => {
+    if (translateText) {
+      speak(translateText);
+    }
+  }, [translateText, selectedLanguage]);
+
+
+  const startRecording = () => {
+    // // Create a new SpeechRecognition instance and configure it
+    // recognitionRef.current = new window.webkitSpeechRecognition();
+    // recognitionRef.current.continuous = true;
+    // recognitionRef.current.interimResults = false;
+    // recognitionRef.current.lang = selectedLanguage;
+    console.log(selectedLanguage);
     // Event handler for speech recognition results
     recognitionRef.current.onresult = (event: any) => {
       const { transcript } = event.results[event.results.length - 1][0];
 
       // Log the recognition results and update the transcript state
-      console.log(event.results);
+      console.log(transcript);
       setTranscript(transcript);
+    };
+
+    recognitionRef.current.onend = () => {
+      console.log("Speech recognition service disconnected, reconnecting...");
+      recognitionRef.current.start();
     };
 
     // Start the speech recognition
     recognitionRef.current.start();
   };
+  // const texttospeech = async () => {
+  //   const data = {
+  //     model_id: "eleven_multilingual_v2",
+  //     text: translateText,
+  //     voice_settings: {
+  //       stability: 1,
+  //       similarity_boost: 1,
+  //       style: 2,
+  //     },
+  //   };
+
+  //   axios
+  //     .post(
+  //       "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM",
+  //       data,
+  //       {
+  //         headers: {
+  //           "xi-api-key": "7cabe86334a078e51c316eb42f430486",
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
 
   const stopRecording = () => {
     if (recognitionRef.current) {
@@ -142,12 +207,16 @@ export default function RoomId({ params }: any) {
       {/* Add more options as needed */}
       <div className="absolute z-10 top-5 left-4">
         <p className=" p-5">{translateText}</p>
+          <>
         <label className="block text-sm font-medium text-gray-700 mt-12">
           Select your language
         </label>
         <select
           value={selectedLanguage}
-          onChange={(e) => setSelectedLanguage(e.target.value)}
+          onChange={(e) => {
+            setSelectedLanguage(e.target.value)
+            socket.emit('languageSelected', e.target.value);
+          }}
           className="text-black py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         >
           <option value="ml">Malayalam</option>
@@ -171,6 +240,8 @@ export default function RoomId({ params }: any) {
           <option value="pa">Punjabi</option>
           <option value="or">Odia</option>
         </select>
+        </>
+        
       </div>
       <div className="flex flex-col h-full w-full " ref={myMeeting}></div>
     </div>

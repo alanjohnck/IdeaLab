@@ -44,8 +44,11 @@ io.on("connection", (socket) => {
 
       // Clear the buffer
       buffer = '';
-    }, 500); // Wait for 1 second of silence before emitting
+    }, 0); // Wait for 1 second of silence before emitting
   });
 
+  socket.on('languageSelected', (language) => {
+    socket.broadcast.emit('languageSelected', language);
+  });
   // Add more event handlers as needed
 });
