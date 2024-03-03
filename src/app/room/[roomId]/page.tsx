@@ -45,7 +45,6 @@ export default function RoomId({ params }: any) {
       console.log(`recieved : ${data} `);
     });
 
-    // Clean up the event listener when the component is unmounted
     return () => {
       socket.off("transcriptText");
     };
@@ -56,7 +55,6 @@ export default function RoomId({ params }: any) {
       setSourceLang(language);
     });
 
-    // Clean up the event listener when the component is unmounted
     return () => {
       socket.off("languageSelected");
     };
@@ -172,7 +170,7 @@ export default function RoomId({ params }: any) {
   };
 
   const apiKey = "7cabe86334a078e51c316eb42f430486";
-  const voiceId = "21m00Tcm4TlvDq8ikWAM"
+  const voiceId = "iP95p4xoKVk53GoZ742B"
   const stopRecording = () => {
     if (recognitionRef.current) {
       // Stop the speech recognition and mark recording as complete
@@ -184,7 +182,7 @@ export default function RoomId({ params }: any) {
     <div className="relative flex items-center flex-col h-screen bg-white">
       {/* Add more options as needed */}
       <div className="absolute z-10 top-5 left-4">
-        <p className=" p-5">{translateText}</p>
+        <p className="flex float-end justify-center align-bottom p-5">{translateText}</p>
         <>
           <label className="block text-sm font-medium text-gray-700 mt-12">
             Select your language
