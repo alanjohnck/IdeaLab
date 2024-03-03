@@ -130,6 +130,7 @@ export default function RoomId({ params }: any) {
   const voiceSettings = {
     stability: 0.95,
     similarity_boost: 1,
+    use_speaker_boost: true
   };
 
   useEffect(() => {
@@ -170,7 +171,7 @@ export default function RoomId({ params }: any) {
     // Start the speech recognition
     recognitionRef.current.start();
   };
-
+  const modelId = "eleven_multilingual_v2"
   const apiKey = "7cabe86334a078e51c316eb42f430486";
   const voiceId = "21m00Tcm4TlvDq8ikWAM"
   const stopRecording = () => {
@@ -224,6 +225,7 @@ export default function RoomId({ params }: any) {
           text={translateText}
           apiKey={apiKey}
           voiceSettings={voiceSettings}
+          modelId={modelId}
         />
       </div>
       <div className="flex flex-col h-full w-full " ref={myMeeting}></div>

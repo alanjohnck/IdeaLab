@@ -1,5 +1,5 @@
 // AudioStream.tsx
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 
 interface VoiceSettings {
@@ -12,6 +12,7 @@ interface AudioStreamProps {
   text: string;
   apiKey: string;
   voiceSettings: VoiceSettings;
+  modelId: string;
 }
 
 const AudioStream: React.FC<AudioStreamProps> = ({
@@ -19,6 +20,7 @@ const AudioStream: React.FC<AudioStreamProps> = ({
   text,
   apiKey,
   voiceSettings,
+  modelId
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -36,6 +38,7 @@ const AudioStream: React.FC<AudioStreamProps> = ({
     const requestBody = {
       text,
       voice_settings: voiceSettings,
+      model_id: modelId,
     };
 
     try {
@@ -59,11 +62,11 @@ const AudioStream: React.FC<AudioStreamProps> = ({
 
   return (
     <div>
-      <button onClick={startStreaming} disabled={loading}>
-        Start Streaming
-      </button>
-      {error && <p>{error}</p>}
-    </div>
+    <button onClick={startStreaming} disabled={loading}>
+      Start Streaming
+    </button>
+    {error && <p>{error}</p>}
+  </div>
   );
 };
 
