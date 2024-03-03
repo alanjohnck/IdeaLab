@@ -48,7 +48,7 @@ export default function Home() {
           </div>
           <div className="flex flex-grow h-1/6 justify-center items-center pb-5 ">
             <Link href="/meetingpage">
-              <button className=" box-content p-4 border-4 bg-[#2096BD]    rounded-xl py-4 px-9 font-semibold  ">
+              <button className=" box-content p-4 border-4 bg-[#2096BD]    rounded-xl py-4 px-9 font-semibold  hover:opacity-90">
                 New Meeting
                 <img
                   src="Video call.svg"
