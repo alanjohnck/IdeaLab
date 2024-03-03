@@ -4,11 +4,11 @@ import middle from "../../public/transcend-middle.png";
 import Link from "next/link";
 export default function Home() {
   return (
-    <div className="grid grid-row-3 w-screen bg-white ">
+    <div className="grid grid-row-3 w-full bg-white overflow-hidden">
       {/**frame 1 */}
       <div className="flex flex-col h-screen gap-3 bg-white">
         {/**NAVBAR */}
-        <div className="flex flex-row w-screen h-24 fixed bg-white items-center justify-between z-20 ">
+        <div className="flex flex-row w-full h-24 fixed bg-white items-center justify-between z-20 ">
           <img
             className="flex w-45 h-36 p-6 cursor-pointer"
             src="Component 2.svg"
